@@ -53,31 +53,84 @@
         </pluginRepository>
     </pluginRepositories>
     
+    <!-- You can override properties with 'mvn install -Dtests.skip=true'. -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.version>1.8</maven.compiler.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.args><!-- -Aproduction --></maven.compiler.args> <!-- You can also pass this just as an argument like 'mvn clean install -Dmaven.compiler.args=-Aproduction'. -->
-        <tests.skip>false</tests.skip> <!-- To re-enable tests, run 'mvn install -Dtests.skip=false'. -->
+        <maven.compiler.argument></maven.compiler.argument>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+        <maven.source.skip>true</maven.source.skip>
+        <maven.test.skip>false</maven.test.skip>
+        <maven.test.failure.ignore>false</maven.test.failure.ignore>
+        <jacoco.skip>false</jacoco.skip>
     </properties>
     
+    <!-- You can activate a profile with 'mvn install -P fast,ignore,debugging'. -->
+    <profiles>
+        
+        <!-- Fast compilation by skipping all test: -->
+        <profile>
+            <id>fast</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+                <jacoco.skip>true</jacoco.skip>
+            </properties>
+        </profile>
+        
+        <!-- Build all modules by ignoring failed tests: -->
+        <profile>
+            <id>ignore</id>
+            <properties>
+                <maven.test.failure.ignore>true</maven.test.failure.ignore>
+            </properties>
+        </profile>
+        
+        <!-- Remote debugging of the annotation processing: -->
+        <profile>
+            <id>debugging</id>
+            <properties>
+                <maven.compiler.argument>-J-Xdebug -J-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005</maven.compiler.argument>
+            </properties>
+        </profile>
+        
+        <!-- Deploy the artifacts with Javadoc and sources: -->
+        <profile>
+            <id>deployment</id>
+            <properties>
+                <maven.javadoc.skip>false</maven.javadoc.skip>
+                <maven.source.skip>false</maven.source.skip>
+            </properties>
+        </profile>
+        
+        <!-- Remote debugging of the annotation processing: -->
+        <profile>
+            <id>production</id>
+            <properties>
+                <maven.compiler.argument>-Aproduction</maven.compiler.argument>
+            </properties>
+        </profile>
+        
+    </profiles>
+    
     <dependencies>
-        <!-- Activate this dependency as soon as needed:
+        
+        <!-- https://mvnrepository.com/artifact/com.google.j2objc/j2objc-annotations -->
         <dependency>
             <groupId>com.google.j2objc</groupId>
             <artifactId>j2objc-annotations</artifactId>
-            <version>0.9.8</version>
+            <version>1.1</version>
         </dependency>
-        -->
-        <!-- Add this dependency wherever you have testcases:
+        
+        <!-- https://mvnrepository.com/artifact/com.google.truth/truth -->
         <dependency>
-            <groupId>net.digitalid.utility</groupId>
-            <artifactId>utility-testing</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.google.truth</groupId>
+            <artifactId>truth</artifactId>
+            <version>0.30</version>
             <scope>test</scope>
         </dependency>
-        -->
+        
     </dependencies>
     
     <build>
@@ -90,7 +143,7 @@
                 <version>1.10</version>
                 <executions>
                     <execution>
-                        <id>add-source</id>
+                        <id>add-sources</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>add-source</goal>
@@ -119,14 +172,9 @@
                     <compilerArguments>
                         <bootclasspath>${compiler.bootclasspath.android}</bootclasspath>
                     </compilerArguments>
-                    <compilerArgument>${maven.compiler.args}</compilerArgument>
+                    <compilerArgument>${maven.compiler.argument}</compilerArgument>
                     <!-- NetBeans seems to need the following line sometimes: -->
                     <generatedSourcesDirectory>target/generated-sources/annotations</generatedSourcesDirectory>
-                    <!-- Uncomment the following 2 lines if you need to remotely debug the annotation processing. -->
-<!--
-                    <compilerArgument>-J-Xdebug</compilerArgument>
-                    <compilerArgument>-J-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005</compilerArgument>
--->
                 </configuration>
             </plugin>
             
@@ -135,9 +183,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.19.1</version>
                 <configuration>
-                    <testFailureIgnore>false</testFailureIgnore>
                     <trimStackTrace>false</trimStackTrace>
-                    <skipTests>${tests.skip}</skipTests>
                 </configuration>
             </plugin>
             
@@ -148,10 +194,10 @@
                 <configuration>
                     <quiet>true</quiet>
                     <linksource>false</linksource>
-                    <doctitle>Digital ID Utility</doctitle>
+                    <doctitle>Digital ID</doctitle>
                     <additionalparam>-Xdoclint:none</additionalparam>
                     <links>
-                        <!-- TODO: Include all utility Javadocs here! -->
+                        <!-- Include all utility Javadocs here! -->
                         <!--<link>https://docs.digitalid.net/utility/logging/${project.version}/</link>-->
                         <link>http://docs.oracle.com/javase/7/docs/api/</link>
                     </links>
@@ -165,8 +211,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>attach-javadocs</id>
-                        <phase>none</phase> <!-- TODO: Remove this line again! -->
+                        <id>attach-javadoc</id>
                         <goals>
                             <goal>jar</goal>
                         </goals>
@@ -181,7 +226,6 @@
                 <executions>
                     <execution>
                         <id>attach-sources</id>
-                        <phase>none</phase> <!-- TODO: Remove this line again! -->
                         <goals>
                             <goal>jar</goal>
                         </goals>
@@ -194,8 +238,8 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.7.7.201606060606</version>
                 <configuration>
-                    <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
-                    <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
+                    <destFile>${project.build.directory}/coverage-reports/jacoco-unit.exec</destFile>
+                    <dataFile>${project.build.directory}/coverage-reports/jacoco-unit.exec</dataFile>
                 </configuration>
                 <executions>
                     <execution>

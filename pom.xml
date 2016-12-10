@@ -3,8 +3,8 @@
     
     <groupId>net.digitalid</groupId>
     <artifactId>master</artifactId>
-    <version>1.0.0</version>
     <packaging>pom</packaging>
+    <version>1.0.0</version>
     
     <organization>
         <name>Synacts GmbH</name>
@@ -136,7 +136,7 @@
     <build>
         <plugins>
             
-            <!-- Required by the eclipse IDE to locate the generated sources. -->
+            <!-- Required by the Eclipse IDE to locate the generated sources. -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>

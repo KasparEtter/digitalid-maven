@@ -104,7 +104,7 @@
             </properties>
         </profile>
         
-        <!-- Remote debugging of the annotation processing: -->
+        <!-- Generate the code in optimized production mode: -->
         <profile>
             <id>production</id>
             <properties>

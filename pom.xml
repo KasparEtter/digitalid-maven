@@ -59,6 +59,7 @@
         <maven.compiler.version>1.8</maven.compiler.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.argument></maven.compiler.argument>
         <maven.compiler.argument1></maven.compiler.argument1>
         <maven.compiler.argument2></maven.compiler.argument2>
         <maven.javadoc.skip>true</maven.javadoc.skip>
@@ -174,8 +175,9 @@
                     <compilerArguments>
                         <bootclasspath>${compiler.bootclasspath.android}</bootclasspath>
                     </compilerArguments>
-                    <compilerArgument>${maven.compiler.argument1}</compilerArgument>
-                    <compilerArgument>${maven.compiler.argument2}</compilerArgument>
+                    <compilerArgument>${maven.compiler.argument}</compilerArgument>
+                    <!--compilerArgument>${maven.compiler.argument1}</compilerArgument>
+                    <compilerArgument>${maven.compiler.argument2}</compilerArgument-->
                     <!-- NetBeans seems to need the following line sometimes: -->
                     <generatedSourcesDirectory>target/generated-sources/annotations</generatedSourcesDirectory>
                 </configuration>

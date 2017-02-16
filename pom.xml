@@ -66,6 +66,8 @@
         <maven.source.skip>true</maven.source.skip>
         <maven.test.skip>false</maven.test.skip>
         <maven.test.failure.ignore>false</maven.test.failure.ignore>
+        <assertj.packages>none</assertj.packages>
+        <assertj.classes></assertj.classes>
         <jacoco.skip>false</jacoco.skip>
     </properties>
     
@@ -126,11 +128,19 @@
             <version>1.1</version>
         </dependency>
         
-        <!-- https://mvnrepository.com/artifact/com.google.truth/truth -->
+        <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
         <dependency>
-            <groupId>com.google.truth</groupId>
-            <artifactId>truth</artifactId>
-            <version>0.30</version>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.6.2</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <!-- https://mvnrepository.com/artifact/junit/junit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         
@@ -172,15 +182,38 @@
                     <target>${maven.compiler.target}</target>
                     <executable>${maven.compiler.executable}</executable>
                     <compilerVersion>${maven.compiler.version}</compilerVersion>
-                    <compilerArguments>
-                        <bootclasspath>${compiler.bootclasspath.android}</bootclasspath>
-                    </compilerArguments>
-                    <compilerArgument>${maven.compiler.argument}</compilerArgument>
-                    <!--compilerArgument>${maven.compiler.argument1}</compilerArgument>
-                    <compilerArgument>${maven.compiler.argument2}</compilerArgument-->
+                    <compilerArgs>
+                        <arg>${maven.compiler.argument}</arg>
+                        <arg>${maven.compiler.argument1}</arg>
+                        <arg>${maven.compiler.argument2}</arg>
+                    </compilerArgs>
                     <!-- NetBeans seems to need the following line sometimes: -->
                     <generatedSourcesDirectory>target/generated-sources/annotations</generatedSourcesDirectory>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <compilerArguments>
+                                <bootclasspath>${compiler.bootclasspath.android}</bootclasspath>
+                            </compilerArguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>default-testCompile</id>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                        <configuration>
+                            <compilerArguments>
+                                <bootclasspath>${compiler.bootclasspath.regular}</bootclasspath>
+                            </compilerArguments>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             
             <plugin>
@@ -233,6 +266,33 @@
                         <id>attach-sources</id>
                         <goals>
                             <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <!-- Execute the plugin with 'mvn assertj:generate-assertions'. -->
+            <plugin>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-assertions-generator-maven-plugin</artifactId>
+                <version>2.0.0</version>
+                <configuration>
+                    <hierarchical>true</hierarchical>
+                    <generateAssertions>true</generateAssertions>
+                    <generateBddAssertions>false</generateBddAssertions>
+                    <generateSoftAssertions>false</generateSoftAssertions>
+                    <generateJUnitSoftAssertions>false</generateJUnitSoftAssertions>
+                    <templates>
+                        <templatesDirectory>${DIGITALID_HOME}/libraries/templates</templatesDirectory>
+                        <assertionsEntryPointClass>assertions_entry_point_class.txt</assertionsEntryPointClass>
+                        <assertionEntryPointMethod>assertions_entry_point_method.txt</assertionEntryPointMethod>
+                    </templates>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generate-assertions</id>
+                        <goals>
+                            <goal>generate-assertions</goal>
                         </goals>
                     </execution>
                 </executions>

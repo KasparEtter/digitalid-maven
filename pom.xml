@@ -278,6 +278,34 @@
                 </executions>
             </plugin>
             
+            <!-- Goals: 'license:check', 'license:format' and 'license:remove'. -->
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <header>com/mycila/licenses/APACHE-2</header>
+                    <properties>
+                        <owner>Synacts GmbH, Switzerland</owner>
+                        <year>2017</year>
+                        <email>info@synacts.com</email>
+                    </properties>
+                    <includes>
+                        <include>**/*.java</include>
+                    </includes>
+                    <mapping>
+                        <java>SLASHSTAR_STYLE</java>
+                    </mapping>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.mycila</groupId>
+                        <artifactId>licenses</artifactId>
+                        <version>1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            
             <!-- Execute the plugin with 'mvn j2objc:convert'. -->
             <plugin>
                 <groupId>com.smoope.utils</groupId>

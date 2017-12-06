@@ -49,6 +49,7 @@
         <assertj.packages>none</assertj.packages>
         <assertj.classes></assertj.classes>
         <jacoco.skip>false</jacoco.skip>
+        <gpg.skip>true</gpg.skip>
     </properties>
     
     <!-- You can activate a profile with 'mvn install -P fast,ignore,debugging'. -->
@@ -86,6 +87,7 @@
             <properties>
                 <maven.javadoc.skip>false</maven.javadoc.skip>
                 <maven.source.skip>false</maven.source.skip>
+                <gpg.skip>false</gpg.skip>
             </properties>
         </profile>
         

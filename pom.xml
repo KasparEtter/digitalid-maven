@@ -13,49 +13,28 @@
     
     <licenses>
         <license>
-            <name>To be determined</name>
-            <url>https://www.synacts.com/company/#contact</url>
-            <comments>Until the license is determined, all rights are reserved by Synacts GmbH.</comments>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
     
-    <repositories>
-        <repository>
-            <id>digitalid-releases</id>
-            <name>Digital ID Releases</name>
-            <url>https://repo.digitalid.net/content/repositories/releases/</url>
-        </repository>
-        <repository>
-            <id>digitalid-snapshots</id>
-            <name>Digital ID Snapshots</name>
-            <url>https://repo.digitalid.net/content/repositories/snapshots/</url>
-        </repository>
-    </repositories>
-    
-    <distributionManagement>
-        <repository>
-            <id>digitalid-deployment</id>
-            <name>Final Releases</name>
-            <url>https://repo.digitalid.net/content/repositories/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>digitalid-deployment</id>
-            <name>Snapshot Releases</name>
-            <url>https://repo.digitalid.net/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
-    
-    <pluginRepositories>
-        <pluginRepository>
-            <id>sonatype-nexus-snapshots</id>
-            <name>sonatype-nexus-snapshots</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </pluginRepository>
-    </pluginRepositories>
+    <developers>
+        <developer>
+            <name>Kaspar Etter</name>
+            <email>kaspar.etter@digitalid.net</email>
+            <organization>Synacts</organization>
+            <organizationUrl>https://www.synacts.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Stephanie Stroka</name>
+            <email>stephanie.stroka@digitalid.net</email>
+            <organization>Synacts</organization>
+            <organizationUrl>https://www.synacts.com</organizationUrl>
+        </developer>
+    </developers>
     
     <!-- You can override properties with 'mvn install -Dtests.skip=true'. -->
     <properties>
-        <compiler.bootclasspath>${compiler.bootclasspath.android}</compiler.bootclasspath>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.version>1.8</maven.compiler.version>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -181,7 +160,6 @@
                     <verbose>false</verbose>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
-                    <executable>${maven.compiler.executable}</executable>
                     <compilerVersion>${maven.compiler.version}</compilerVersion>
                     <compilerArgs>
                         <arg>${maven.compiler.argument}</arg>
@@ -191,30 +169,6 @@
                     <!-- NetBeans seems to need the following line sometimes: -->
                     <generatedSourcesDirectory>target/generated-sources/annotations</generatedSourcesDirectory>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>default-compile</id>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        <configuration>
-                            <compilerArguments>
-                                <bootclasspath>${compiler.bootclasspath}</bootclasspath>
-                            </compilerArguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>default-testCompile</id>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                        <configuration>
-                            <compilerArguments>
-                                <bootclasspath>${compiler.bootclasspath.regular}</bootclasspath>
-                            </compilerArguments>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             
             <plugin>
@@ -233,7 +187,7 @@
                 <configuration>
                     <quiet>true</quiet>
                     <linksource>false</linksource>
-                    <doctitle>Digital ID</doctitle>
+                    <doctitle>Digital ID Library</doctitle>
                     <additionalparam>-Xdoclint:none</additionalparam>
                     <links>
                         <!-- Include all Javadocs here! -->
@@ -244,7 +198,7 @@
                         <tagletArtifact>
                             <groupId>net.digitalid.utility</groupId>
                             <artifactId>utility-taglets</artifactId>
-                            <version>${project.version}</version>
+                            <version>0.7.0</version>
                         </tagletArtifact>
                     </tagletArtifacts>
                 </configuration>
@@ -284,7 +238,7 @@
                     <generateSoftAssertions>false</generateSoftAssertions>
                     <generateJUnitSoftAssertions>false</generateJUnitSoftAssertions>
                     <templates>
-                        <templatesDirectory>${DIGITALID_HOME}/libraries/templates</templatesDirectory>
+                        <templatesDirectory>resources/assertj</templatesDirectory>
                         <assertionsEntryPointClass>assertions_entry_point_class.txt</assertionsEntryPointClass>
                         <assertionEntryPointMethod>assertions_entry_point_method.txt</assertionEntryPointMethod>
                     </templates>
